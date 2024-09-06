@@ -1,17 +1,62 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Leagues
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content *ngIf = "isLeagueData">
+  <ion-list  class="margin-bottom: 2rem">
+    <ion-item>
+      <ion-select
+        [(ngModel)] = "selectedLeague"
+        class="always-flip"
+        toggleIcon="caret-down-sharp"
+        interface="popover"
+        [compareWith]="compareWith"
+        placeholder="Select Leagues Names"
+        (ionChange)="handleChange($event)"
+      >
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+      <ion-avatar slot="start"  style="background: rgba(0,0,0,0.3)">
+
+          <ion-img src="{{leagueDetails.leagues[0].strBadge}}" />
+
+      </ion-avatar>
+        <ion-select-option *ngFor="let league of getAllLeagues" [value]="league">
+        <ion-label slot="end">
+          {{ league.strLeague }}
+        </ion-label>
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-card *ngFor="let match of upcomingMatches[0]" style="border-radius: 55px; cursor: pointer; box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" (click) = "NavigateToDetails(match.idEvent)">
+    <ion-card-header>
+      <div class="ion-text-right">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </div>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="match-container">
+        <div class="team">
+          <ion-thumbnail>
+            <ion-img src="{{match.strHomeTeamBadge}}"></ion-img>
+          </ion-thumbnail>
+          <span class="team-name">{{match.strHomeTeam}}</span>
+        </div>
+        <span class="match-time">{{getLocalTime(match.strTimestamp)}}</span>
+        <div class="team">
+          <ion-thumbnail>
+            <ion-img src="{{match.strAwayTeamBadge}}"></ion-img>
+          </ion-thumbnail>
+          <span class="team-name">{{match.strAwayTeam}}</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
